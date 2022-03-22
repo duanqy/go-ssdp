@@ -22,7 +22,7 @@ func TestAnnounceAlive(t *testing.T) {
 	}
 	defer m.Close()
 
-	err = AnnounceAlive("test:announce+alive", "usn:announce+alive", "location:announce+alive", "server:announce+alive", 600, "")
+	err = AnnounceAlive("test:announce+alive", "usn:announce+alive", "location:announce+alive", "server:announce+alive", "", 600, "")
 	if err != nil {
 		t.Fatalf("failed to announce alive: %s", err)
 	}

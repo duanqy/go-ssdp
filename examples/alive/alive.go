@@ -27,7 +27,7 @@ func main() {
 		ssdp.Logger = log.New(os.Stderr, "[SSDP] ", log.LstdFlags)
 	}
 
-	err := ssdp.AnnounceAlive(*nt, *usn, *loc, *srv, *maxAge, *laddr)
+	err := ssdp.AnnounceAlive(*nt, *usn, *loc, *srv, "", *maxAge, *laddr)
 	if err != nil {
 		log.Fatal(err)
 	}

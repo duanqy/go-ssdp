@@ -21,6 +21,7 @@ type Advertiser struct {
 	usn      string
 	location string
 	server   string
+	metadata string
 	maxAge   int
 
 	conn *multicastConn
@@ -30,7 +31,7 @@ type Advertiser struct {
 }
 
 // Advertise starts advertisement of service.
-func Advertise(st, usn, location, server string, maxAge int) (*Advertiser, error) {
+func Advertise(st, usn, location, server, metadata string, maxAge int) (*Advertiser, error) {
 	conn, err := multicastListen(recvAddrResolver)
 	if err != nil {
 		return nil, err
@@ -41,6 +42,7 @@ func Advertise(st, usn, location, server string, maxAge int) (*Advertiser, error
 		usn:      usn,
 		location: location,
 		server:   server,
+		metadata: metadata,
 		maxAge:   maxAge,
 		conn:     conn,
 		ch:       make(chan *message),
@@ -106,7 +108,7 @@ func (a *Advertiser) handleRaw(from net.Addr, raw []byte) error {
 	}
 	logf("received M-SEARCH MAN=%s ST=%s from %s", man, st, from.String())
 	// build and send a response.
-	msg, err := buildOK(a.st, a.usn, a.location, a.server, a.maxAge)
+	msg, err := buildOK(a.st, a.usn, a.location, a.server, a.metadata, a.maxAge)
 	if err != nil {
 		return err
 	}
@@ -114,7 +116,7 @@ func (a *Advertiser) handleRaw(from net.Addr, raw []byte) error {
 	return nil
 }
 
-func buildOK(st, usn, location, server string, maxAge int) ([]byte, error) {
+func buildOK(st, usn, location, server, metadata string, maxAge int) ([]byte, error) {
 	b := new(bytes.Buffer)
 	// FIXME: error should be checked.
 	b.WriteString("HTTP/1.1 200 OK\r\n")
@@ -126,6 +128,9 @@ func buildOK(st, usn, location, server string, maxAge int) ([]byte, error) {
 	}
 	if server != "" {
 		fmt.Fprintf(b, "SERVER: %s\r\n", server)
+	}
+	if metadata != "" {
+		fmt.Fprintf(b, "METADATA: %s\r\n", metadata)
 	}
 	fmt.Fprintf(b, "CACHE-CONTROL: max-age=%d\r\n", maxAge)
 	b.WriteString("\r\n")
@@ -153,7 +158,7 @@ func (a *Advertiser) Alive() error {
 	if err != nil {
 		return err
 	}
-	msg, err := buildAlive(addr, a.st, a.usn, a.location, a.server,
+	msg, err := buildAlive(addr, a.st, a.usn, a.location, a.server, a.metadata,
 		a.maxAge)
 	if err != nil {
 		return err

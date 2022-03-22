@@ -93,7 +93,7 @@ func TestSearch_Request(t *testing.T) {
 }
 
 func TestSearch_Response(t *testing.T) {
-	a, err := Advertise("test:search+response", "usn:search+response", "location:search+response", "server:search+response", 600)
+	a, err := Advertise("test:search+response", "usn:search+response", "location:search+response", "server:search+response", "", 600)
 	if err != nil {
 		t.Fatalf("failed to Advertise: %s", err)
 	}
@@ -125,7 +125,7 @@ func TestSearch_Response(t *testing.T) {
 }
 
 func TestSearch_ServiceRawHeader(t *testing.T) {
-	a, err := Advertise("test:search+servicerawheader", "usn:search+servicerawheader", "location:search+servicerawheader", "server:search+servicerawheader", 600)
+	a, err := Advertise("test:search+servicerawheader", "usn:search+servicerawheader", "location:search+servicerawheader", "server:search+servicerawheader", "", 600)
 	if err != nil {
 		t.Fatalf("failed to Advertise: %s", err)
 	}

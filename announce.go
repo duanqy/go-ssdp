@@ -7,7 +7,7 @@ import (
 )
 
 // AnnounceAlive sends ssdp:alive message.
-func AnnounceAlive(nt, usn, location, server string, maxAge int, localAddr string) error {
+func AnnounceAlive(nt, usn, location, server, metadata string, maxAge int, localAddr string) error {
 	// dial multicast UDP packet.
 	conn, err := multicastListen(&udpAddrResolver{addr: localAddr})
 	if err != nil {
@@ -19,7 +19,7 @@ func AnnounceAlive(nt, usn, location, server string, maxAge int, localAddr strin
 	if err != nil {
 		return err
 	}
-	msg, err := buildAlive(addr, nt, usn, location, server, maxAge)
+	msg, err := buildAlive(addr, nt, usn, location, server, metadata, maxAge)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func AnnounceAlive(nt, usn, location, server string, maxAge int, localAddr strin
 	return nil
 }
 
-func buildAlive(raddr net.Addr, nt, usn, location, server string, maxAge int) ([]byte, error) {
+func buildAlive(raddr net.Addr, nt, usn, location, server, metadata string, maxAge int) ([]byte, error) {
 	b := new(bytes.Buffer)
 	// FIXME: error should be checked.
 	b.WriteString("NOTIFY * HTTP/1.1\r\n")
@@ -42,6 +42,9 @@ func buildAlive(raddr net.Addr, nt, usn, location, server string, maxAge int) ([
 	}
 	if server != "" {
 		fmt.Fprintf(b, "SERVER: %s\r\n", server)
+	}
+	if metadata != "" {
+		fmt.Fprintf(b, "METADATA: %s\r\n", metadata)
 	}
 	fmt.Fprintf(b, "CACHE-CONTROL: max-age=%d\r\n", maxAge)
 	b.WriteString("\r\n")

@@ -22,7 +22,7 @@ func TestAdvertise_Alive(t *testing.T) {
 	}
 	defer m.Close()
 
-	a, err := Advertise("test:advertise+alive", "usn:advertise+alive", "location:advertise+alive", "server:advertise+alive", 600)
+	a, err := Advertise("test:advertise+alive", "usn:advertise+alive", "location:advertise+alive", "server:advertise+alive", "", 600)
 	if err != nil {
 		t.Fatalf("failed to Advertise: %s", err)
 	}
@@ -98,7 +98,7 @@ func TestAdvertise_Bye(t *testing.T) {
 	}
 	defer m.Close()
 
-	a, err := Advertise("test:advertise+bye", "usn:advertise+bye", "location:advertise+bye", "server:advertise+bye", 600)
+	a, err := Advertise("test:advertise+bye", "usn:advertise+bye", "location:advertise+bye", "server:advertise+bye", "", 600)
 	if err != nil {
 		t.Fatalf("failed to Advertise: %s", err)
 	}
