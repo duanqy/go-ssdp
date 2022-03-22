@@ -1,4 +1,4 @@
-module github.com/koron/go-ssdp
+module github.com/duanqy/go-ssdp
 
 go 1.13
 

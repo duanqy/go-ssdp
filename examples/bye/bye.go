@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/koron/go-ssdp"
+	"github.com/duanqy/go-ssdp"
 )
 
 func main() {
